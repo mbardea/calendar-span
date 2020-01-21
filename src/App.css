@@ -36,3 +36,78 @@
     transform: rotate(360deg);
   }
 }
+
+.cal-container {
+}
+
+.month {
+    margin: 10px;
+    float: left;
+}
+
+.month:nth-child(3n+1) {
+    clear: left;
+}
+
+.month-header {
+    font-size: 1.3rem;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.month-name {
+    margin-bottom: 10px;
+}
+
+.row {
+    float: left;
+    clear: left;
+}
+
+.day-header {
+    font-size: 0.9rem;
+    width: 2rem;
+    float: left;
+    background-color: transparent;
+    padding: 2px;
+    margin: 2px;
+
+    color: #777;
+}
+
+.gap {
+    font-size: 1rem;
+    width: 2rem;
+    float: left;
+    background-color: transparent;
+    padding: 2px;
+    margin: 2px;
+}
+
+.day {
+    font-size: 1rem;
+    width: 2rem;
+    float: left;
+    background-color: #055;
+    padding: 2px;
+    margin: 2px;
+}
+
+.excluded {
+    background-color: #555;
+}
+
+.editor {
+    margin-top: 40px;
+}
+
+.person {
+  margin: 1px;
+}
+
+.person.selected {
+  background-color: #55F;
+  border-color: #55F;
+  color: white;
+}
+

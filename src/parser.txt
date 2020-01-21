@@ -1,0 +1,12 @@
+all include 2019-01-05 2019-06-29 xOOOOOx
+all include 2019-09-03 2019-12-21 x00000x
+
+# spring break
+all exclude 2019-03-04 2019-03-15 xOOOOOx
+
+alysa include 2019-04-10 2019-12-31 xxOOOOx
+alysa include 2019-04-10 2019-12-31 xxOOOOx
+
+all include START END
+all exclude START END
+
