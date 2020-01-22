@@ -112,7 +112,7 @@ export class Parser {
                 break;
             case "exclude": include = false;
                 break;
-            default: return new ParserError(line, "The second token must be 'include' or 'exclude'. Found " + operation);
+            default: return new ParserError(line, "The second token must be 'include' or 'exclude'. Found '" + operation + "'");
         }
 
         // parse dates

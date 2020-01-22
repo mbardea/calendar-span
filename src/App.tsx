@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import moment from 'moment';
 
 import {Calendar, People, Editor} from './cal';
@@ -85,7 +85,8 @@ export class App extends React.Component<AppProps, AppState> {
 
         this.setState({
             people: people,
-            rules: rules
+            rules: rules,
+            dateDb: dateDb,
         });
 
         this.notifySelectPerson("all");
@@ -101,14 +102,14 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     notifySelectPerson(name: string) {
-        const {people, rules, dateDb} = this.state;
+        const {rules, dateDb} = this.state;
 
         dateDb.reset();
         this.applyRules(rules, name);
 
         const [start, end] = dateDb.getDateRange();
         let count = 0;
-        const days = scanMomentRange('day', start, end, (d) => {
+        scanMomentRange('day', start, end, (d) => {
            if (dateDb.isEnabled(d)) {
                count++;
            }
@@ -127,7 +128,7 @@ export class App extends React.Component<AppProps, AppState> {
                 <header className="App-header">
                     <Editor dateDb={dateDb} newRuleNotifier={this} />
                     <People people={Array.from(people.values())} selectedPerson={selectedPerson} notifySelectPerson={this.notifySelectPerson}/>
-                    <span>{selectedPersonDays}{selectedPersonDays ? ' days' : ''}</span>
+                    <div className="days">{selectedPersonDays}{selectedPersonDays ? ' days' : ''}</div>
                     <Calendar dateDb={dateDb} />
                 </header>
             </div>

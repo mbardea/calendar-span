@@ -19,7 +19,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -35,6 +35,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.days {
+  margin: 16px;
+  font-size: 0.8em;
 }
 
 .cal-container {
@@ -109,5 +114,22 @@
   background-color: #55F;
   border-color: #55F;
   color: white;
+}
+
+.errors {
+  padding: 2px;
+  margin-top: 16px;
+  background-color: white;
+  font-size: 0.5em;
+  text-align: left;
+}
+
+.error-line {
+  color: #a33;
+}
+
+.error-message {
+  margin-bottom: 8px;
+  color: #777;
 }
 

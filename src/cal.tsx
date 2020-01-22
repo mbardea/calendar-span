@@ -95,6 +95,7 @@ export interface NewRuleNotifier {
 
 export function Editor({dateDb, newRuleNotifier}: {dateDb: DateDb, newRuleNotifier: NewRuleNotifier}) {
     const [text, setText] = useState("");
+    const [errors, setErrors] = useState(new Array<ParserError>());
 
     function onChange(e: React.FormEvent<HTMLTextAreaElement>) {
         console.log("Editor:onChange");
@@ -108,9 +109,33 @@ export function Editor({dateDb, newRuleNotifier}: {dateDb: DateDb, newRuleNotifi
 
         if (errors.length > 0) {
             console.log("Parser errors: ", errors);
+            setErrors(errors);
         } else {
+            setErrors([]);
             newRuleNotifier.notifyNewRules(rules);
         }
+    }
+
+    let errorPartial = null;
+    if (errors.length > 0) {
+        errorPartial = (
+            <div className="errors">
+                {
+                    errors.map((e: ParserError) => {
+                        return (
+                            <>
+                                <div className="error-line">
+                                    {e.line}
+                                </div>
+                                <div className="error-message">
+                                    {e.error}
+                                </div>
+                            </>
+                        );
+                    })
+                }
+            </div>
+        )
     }
 
     return (
@@ -121,6 +146,7 @@ export function Editor({dateDb, newRuleNotifier}: {dateDb: DateDb, newRuleNotifi
             <div>
                 <button onClick={update}>Update</button>
             </div>
+            {errorPartial}
         </div>
     )
 }
