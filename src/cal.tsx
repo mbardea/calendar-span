@@ -5,14 +5,6 @@ import * as _ from 'lodash';
 import * as util from './util';
 import {DateDb, Parser, ParserRule, ParserError} from './parser';
 
-/* export function Example() {
- *     // const [count, setCount] = useState(0);
- *     return <>
- *         <p>Hello Example</p>
- *         <p>{moment.locale()} </p>
- *     </>
- * } */
-
 export interface MonthParams {
     year: number,
     month: number,
@@ -93,7 +85,7 @@ export interface NewRuleNotifier {
     notifyNewRules(rule: ParserRule[]): void
 }
 
-export function Editor({dateDb, newRuleNotifier}: {dateDb: DateDb, newRuleNotifier: NewRuleNotifier}) {
+export function Editor({dateDb, newRuleNotifier}: {dateDb: DateDb, newRuleNotifier: Function /*NewRuleNotifier*/}) {
     const [text, setText] = useState("");
     const [errors, setErrors] = useState(new Array<ParserError>());
 
@@ -112,7 +104,8 @@ export function Editor({dateDb, newRuleNotifier}: {dateDb: DateDb, newRuleNotifi
             setErrors(errors);
         } else {
             setErrors([]);
-            newRuleNotifier.notifyNewRules(rules);
+            /*newRuleNotifier.notifyNewRules(rules); */
+            newRuleNotifier(rules);
         }
     }
 
@@ -121,16 +114,16 @@ export function Editor({dateDb, newRuleNotifier}: {dateDb: DateDb, newRuleNotifi
         errorPartial = (
             <div className="errors">
                 {
-                    errors.map((e: ParserError) => {
+                    errors.map((e: ParserError, i) => {
                         return (
-                            <>
+                            <div key={i}>
                                 <div className="error-line">
                                     {e.line}
                                 </div>
                                 <div className="error-message">
                                     {e.error}
                                 </div>
-                            </>
+                            </div>
                         );
                     })
                 }

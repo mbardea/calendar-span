@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 // import * as _ from 'lodash';
 import moment from 'moment';
@@ -7,34 +7,72 @@ import {Calendar, People, Editor} from './cal';
 import {DateDb, ParserRule} from './parser';
 import {scanMomentRange} from "./util";
 
-// const App: React.FC = () => {
+export const App2: React.FC = () => {
+    const [dateDb, setDateDb] = useState(new DateDb());
+    const [rules, setRules] = useState(new Array<ParserRule>());
+    const [people, setPeople] = useState(new Set<string>());
+    const [selectedPerson, setSelectedPerson] = useState("");
+    const [selectedPersonDays, setSelectedPersonDays] = useState<number | null>(null);
 
-//     const start="2020-05-05";
-//     const end="2020-06-05";
-//     const dateDb = new DateDb();
-//     // dateDb.init(moment(start), moment(end));
-//     dateDb.setRange(moment(start), moment(end), true, new Set<number>([1, 2, 3, 4, 5]));
+    function notifyNewRules(rules: ParserRule[]) {
+        dateDb.reset();
 
-//     const [count, setCount] = useState(0);
+        // Extract people
+        const people = new Set<string>();
+        for (let rule of rules) {
+            people.add(rule.name);
+        }
 
-//     function refresh() {
-//         console.log("Refreshing")
-//         setCount(count + 1);
-//     }
+        setPeople(people);
+        setRules(rules);
+        setDateDb(dateDb);
 
-//     console.log("RENDER")
+        notifySelectPerson("all");
+    }
 
-//     return (
-//         <div className="App">
-//             <header className="App-header">
-//                 <Calendar dateDb={dateDb} />
-//                 <Editor dateDb={dateDb} refresh={refresh} />
-//             </header>
-//         </div>
-//     );
-// }
+    function applyRules(rules: ParserRule[], name: string) {
+        for (let rule of rules) {
+            if (rule.name === "all" || rule.name === name) {
+                console.log("Applying rule: ", rule);
+                dateDb.applyParserRule(rule);
+            }
+        }
+    }
 
-// export default App;
+    function notifySelectPerson(name: string) {
+        dateDb.reset();
+        applyRules(rules, name);
+
+        const [start, end] = dateDb.getDateRange();
+        let count = 0;
+        scanMomentRange('day', start, end, (d) => {
+           if (dateDb.isEnabled(d)) {
+               count++;
+           }
+        });
+
+
+        setSelectedPerson(name);
+        setSelectedPersonDays(count);
+        setDateDb(dateDb);
+    }
+
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                <Editor dateDb={dateDb} newRuleNotifier={notifyNewRules} />
+                <People people={Array.from(people.values())} selectedPerson={selectedPerson} notifySelectPerson={notifySelectPerson} />
+                <div className="days">{selectedPersonDays}{selectedPersonDays ? ' days' : ''}</div>
+                <Calendar dateDb={dateDb} />
+            </header>
+        </div>
+    )
+}
+
+export default App2;
+
+/////////////////////////////////////////////////
 
 interface AppProps {
 }
@@ -126,7 +164,7 @@ export class App extends React.Component<AppProps, AppState> {
         return (
             <div className="App">
                 <header className="App-header">
-                    <Editor dateDb={dateDb} newRuleNotifier={this} />
+                    <Editor dateDb={dateDb} newRuleNotifier={this.notifyNewRules} />
                     <People people={Array.from(people.values())} selectedPerson={selectedPerson} notifySelectPerson={this.notifySelectPerson}/>
                     <div className="days">{selectedPersonDays}{selectedPersonDays ? ' days' : ''}</div>
                     <Calendar dateDb={dateDb} />
@@ -136,4 +174,4 @@ export class App extends React.Component<AppProps, AppState> {
     }
 }
 
-export default App;
+// export default App;
